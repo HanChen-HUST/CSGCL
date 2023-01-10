@@ -205,5 +205,3 @@ if __name__ == '__main__':
             res = test(epoch)
         if 'final' in log:
             print(f'{res}')
-
-
