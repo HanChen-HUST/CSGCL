@@ -31,7 +31,7 @@ from src.utils import (get_base_model,
                        load_model,
                        remove_model)
 from src.dataset import get_dataset
-from augment import get_cd_algorithm
+from src.augment import get_cd_algorithm
 def train(epoch):
     model.train()
     optimizer.zero_grad()
