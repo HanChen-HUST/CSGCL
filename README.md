@@ -1,5 +1,5 @@
 # CSGCL
-source code for IJCAI 2023 Under Review Paper Community Strength Enhanced Graph Contrastive Learning
+PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enhanced Graph Contrastive Learning
 # Requirements
 * Python 3.7.4
 * PyTorch 1.7.0
