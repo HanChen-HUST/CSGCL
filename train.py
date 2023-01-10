@@ -48,7 +48,6 @@ def train(epoch):
     else:
         x_1 = drop_feature_by_modularity(data.x, n_mod, param["drop_feature_rate_1"], args.drop_feature_thresh)
         x_2 = drop_feature_by_modularity(data.x, n_mod, param['drop_feature_rate_2'], args.drop_feature_thresh)
-
     z1 = model(x_1, edge_index_1)
     z2 = model(x_2, edge_index_2)
     if args.loss_scheme == "mod":
@@ -105,7 +104,6 @@ if __name__ == '__main__':
     parser.add_argument('--drop_feature_thresh', type=float, default=1.)
     parser.add_argument('--loss_scheme', type=str, default=None,
                         choices=["mod"])
-
     default_param = {
         'learning_rate': 0.01,
         'num_hidden': 256,
@@ -194,8 +192,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(
         model.parameters(),
         lr=param['learning_rate'],
-        weight_decay=param['weight_decay']
-    )
+        weight_decay=param['weight_decay'])
     last_epoch = 0
     if args.cp is not None:
         model, optimizer, last_epoch = load_model(model, optimizer, args.cp, device)
