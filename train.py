@@ -1,15 +1,9 @@
 import argparse
-import os
 import os.path as osp
-import socket
-import time
-from datetime import datetime
 import random
 import numpy as np
 import torch
-from torch.utils.tensorboard import SummaryWriter
-from torch_geometric.utils import dropout_adj, degree, to_undirected, to_networkx
-import nni
+from torch_geometric.utils import to_networkx
 from src.functional import (getmod,
                             transition,
                             get_edge_weight,
@@ -38,14 +32,10 @@ from src.utils import (get_base_model,
                        remove_model)
 from src.dataset import get_dataset
 from augment import get_cd_algorithm
-
-
-
-
 def train(epoch):
     model.train()
     optimizer.zero_grad()
-    
+
     edge_index_1 = drop_edge_by_modularity(data.edge_index, edge_weight, p=param['drop_edge_rate_1'],
                                                threshold=args.drop_edge_thresh)
     edge_index_2 = drop_edge_by_modularity(data.edge_index, edge_weight, p=param['drop_edge_rate_2'],
@@ -58,7 +48,7 @@ def train(epoch):
     else:
         x_1 = drop_feature_by_modularity(data.x, n_mod, param["drop_feature_rate_1"], args.drop_feature_thresh)
         x_2 = drop_feature_by_modularity(data.x, n_mod, param['drop_feature_rate_2'], args.drop_feature_thresh)
-   
+
     z1 = model(x_1, edge_index_1)
     z2 = model(x_2, edge_index_2)
     if args.loss_scheme == "mod":
@@ -76,16 +66,11 @@ def train(epoch):
     loss.backward()
     optimizer.step()
     return loss.item()
-
-
-
-
-
 def test(final=False):
     model.eval()
     with torch.no_grad():
         z = model(data.x, data.edge_index)
-    res = {}    
+    res = {}
     seed = np.random.randint(0, 32767)
     split = generate_split(data.num_nodes, train_ratio=0.1, val_ratio=0.1,
                            generator=torch.Generator().manual_seed(seed))
@@ -103,38 +88,24 @@ def test(final=False):
         cls_acc = log_regression(z, dataset, evaluator, split='rand:0.1', num_epochs=3000, preload_split=split)
         acc = cls_acc['acc']
     res["acc"] = acc
-    if final and use_nni:
-        nni.report_final_result(acc)
-    elif use_nni:
-        nni.report_intermediate_result(acc)
     return res
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=str, default='cuda:0')
-    parser.add_argument('-t', '--tasks', type=str, default="cls", nargs='+',
-                        choices=["cls", "clu", "link", "tsne"])
     parser.add_argument('--dataset', type=str, default='WikiCS')
     parser.add_argument('--param', type=str, default='local:wikics.json')
     parser.add_argument('--seed', type=int, default=39788)  # for torch
     parser.add_argument('--batch_size', type=int, default=1024)
     parser.add_argument('--verbose', type=str, default='train,eval,final')
-    parser.add_argument('--log_dir', type=str, default=None, metavar='TENSORBOARD LOG PATH')
     parser.add_argument('--save_split', type=str, nargs='?')
     parser.add_argument('--load_split', type=str, nargs='?')
     parser.add_argument('--validate_interval', type=int, default=100)
     parser.add_argument('--community_detection_method', type=str, default='leiden')
-    parser.add_argument('-e', '--com_drop_edge', action='store_true')
     parser.add_argument('--drop_edge_thresh', type=float, default=1.)
-    parser.add_argument('-f', '--com_drop_feature', action='store_true')
     parser.add_argument('--drop_feature_thresh', type=float, default=1.)
     parser.add_argument('--loss_scheme', type=str, default=None,
                         choices=["mod"])
-    parser.add_argument('-s', '--save_model', type=str, default=None,
-                        metavar='MODEL PATH', dest='model_path')
-    parser.add_argument('-r', '--resume_from_checkpoint', type=str, default=None,
-                        metavar='MODEL PTH FILE', dest='cp')
+
     default_param = {
         'learning_rate': 0.01,
         'num_hidden': 256,
@@ -156,17 +127,12 @@ if __name__ == '__main__':
         'beta': 1.,
         'sigma': 0.25,
     }
-
-    # add hyper-parameters into parser
     param_keys = default_param.keys()
     for key in param_keys:
         parser.add_argument(f'--{key}', type=type(default_param[key]), nargs='?')
     args = parser.parse_args()
-
-    # parse param
     sp = SimpleParam(default=default_param)
     param = sp(source=args.param, preprocess='nni')
-    # merge cli arguments and parsed param
     for key in param_keys:
         if getattr(args, key) is not None:
             param[key] = getattr(args, key)
@@ -177,12 +143,10 @@ if __name__ == '__main__':
                if args.com_drop_edge else '') + \
               (f'_t0_{param["start_ep"]}_beta_{param["beta"]}'
                if args.loss_scheme in ["mod"] else '')
-    use_nni = args.param == 'nni'
-    if use_nni and args.device != 'cpu':
+    if args.device != 'cpu':
         args.device = 'cuda'
-
-    train_scheme = ('ComIso' if args.com_drop_edge else 'DropEdge') + ' & ' + \
-                   ('ComKnock' if args.com_drop_feature else 'DropFeature')
+    train_scheme = ('Communal Attribute Voting' ) + ' & ' + \
+                   ('Communal Edge Dropping')
     if args.loss_scheme == "mod":
         loss_scheme_str = 'Team-Up InfoNCE'
     else:
@@ -202,39 +166,28 @@ if __name__ == '__main__':
           f"beta: {param['beta']}\n"
           f"epochs: {param['num_epochs']}\n"
           )
-
     torch_seed = args.seed
     torch.manual_seed(torch_seed)
     random.seed(12345)
     if args.cls_seed is not None:
-        # for data splitting of cls test
         np.random.seed(args.cls_seed)
-
     device = torch.device(args.device)
-
     path = './datasets'
     path = osp.join(path, args.dataset)
     dataset = get_dataset(path, args.dataset)
     data = dataset[0]
     data = data.to(device)
-
-    if args.com_drop_edge or args.com_drop_feature:
-        print('Detecting communities...')
-        g = to_networkx(data, to_undirected=True)
-        start = time.time()
-        dc_res = get_cd_algorithm(args.community_detection_method)(g)
-        end = time.time()
-        communities = dc_res.communities
-        com = transition(communities, g.number_of_nodes())
-        c_mod, n_mod = getmod(g, communities)
-        edge_weight = get_edge_weight(data.edge_index, com, c_mod)
-        com_size = [len(c) for c in communities]
-        print(f'Done! \n{len(com_size)} communities detected. \n'
-              f'Time consumed: {end - start}s. \n'
-              f'The largest community has {com_size[0]} nodes. \n'
-              f'{com_size.count(1)} isolated nodes and {com_size.count(2)} node pairs. \n'
-              f'Now start training...\n')
-
+    print('Detecting communities...')
+    g = to_networkx(data, to_undirected=True)
+    dc_res = get_cd_algorithm(args.community_detection_method)(g)
+    communities = dc_res.communities
+    com = transition(communities, g.number_of_nodes())
+    c_mod, n_mod = getmod(g, communities)
+    edge_weight = get_edge_weight(data.edge_index, com, c_mod)
+    com_size = [len(c) for c in communities]
+    print(f'Done! \n{len(com_size)} communities detected. \n'
+          f'The largest community has {com_size[0]} nodes. \n'
+         )
     encoder = Encoder(dataset.num_features, param['num_hidden'], get_activation(param['activation']),
                       base_model=get_base_model(param['base_model']), k=param['num_layers']).to(device)
     model = GRACE(encoder, param['num_hidden'], param['num_proj_hidden'], param['tau']).to(device)
@@ -246,135 +199,14 @@ if __name__ == '__main__':
     last_epoch = 0
     if args.cp is not None:
         model, optimizer, last_epoch = load_model(model, optimizer, args.cp, device)
-
-    if not args.com_drop_edge:
-        if param['drop_scheme'] == 'degree':
-            drop_weights = degree_drop_weights(data.edge_index).to(device)
-        elif param['drop_scheme'] == 'pr':
-            drop_weights = pr_drop_weights(data.edge_index, aggr='sink', k=200).to(device)
-        elif param['drop_scheme'] == 'evc':
-            drop_weights = evc_drop_weights(data).to(device)
-        else:
-            drop_weights = None
-    if not args.com_drop_feature:
-        # 设置节点特征丢弃的权重
-        if param['drop_scheme'] == 'degree':
-            edge_index_ = to_undirected(data.edge_index)
-            node_deg = degree(edge_index_[1])
-            if args.dataset == 'WikiCS':
-                feature_weights = feature_drop_weights_dense(data.x, node_c=node_deg).to(device)
-            else:
-                feature_weights = feature_drop_weights(data.x, node_c=node_deg).to(device)
-        elif param['drop_scheme'] == 'pr':
-            node_pr = compute_pr(data.edge_index)
-            if args.dataset == 'WikiCS':
-                feature_weights = feature_drop_weights_dense(data.x, node_c=node_pr).to(device)
-            else:
-                feature_weights = feature_drop_weights(data.x, node_c=node_pr).to(device)
-        elif param['drop_scheme'] == 'evc':
-            node_evc = eigenvector_centrality(data)
-            if args.dataset == 'WikiCS':
-                feature_weights = feature_drop_weights_dense(data.x, node_c=node_evc).to(device)
-            else:
-                feature_weights = feature_drop_weights(data.x, node_c=node_evc).to(device)
-        else:
-            feature_weights = torch.ones((data.x.size(1),)).to(device)  # 默认权重均为 1
-
     log = args.verbose.split(',')
-
-    fres = open(f'res/{comment}.csv', 'a')
-    best_res = -np.inf
-    best_epoch = 0
-
-    log_dir = args.log_dir if args.log_dir is not None else osp.join(
-        'runs', args.dataset, datetime.now().strftime('%b%d_%H-%M-%S') + '_' + socket.gethostname() + comment)
-    os.makedirs(log_dir, exist_ok=True)
-    with SummaryWriter(log_dir=log_dir, comment=comment) as writer:
-        epoch = 0
-        res = test(epoch, tsne_dir=args.tsne_dir)
-
-        if "acc" in res:
-            if 'eval' in log:
-                print(f'(E) | Epoch={epoch:04d}, avg_acc = {res["acc"]}, '
-                      f'avg_micro_f1 = {res["micro_f1"]}, avg_macro_f1 = {res["macro_f1"]}')
-            writer.add_scalar("acc", res["acc"], epoch)
-            writer.add_scalar("micro-f1", res["micro_f1"], epoch)
-            writer.add_scalar("macro-f1", res["macro_f1"], epoch)
-
-        if "nmi" in res and "ari" in res:
-            if 'eval' in log:
-                print(f'(E) | Epoch={epoch:04d}, avg_nmi = {res["nmi"]}, avg_ari = {res["ari"]}')
-            writer.add_scalar("nmi", res["nmi"], epoch)
-            writer.add_scalar("ari", res["ari"], epoch)
-
-        if "auc" in res:
-            if 'eval' in log:
-                print(f'(E) | Epoch={epoch:04d}, avg_auc = {res["auc"]}')
-            writer.add_scalar("auc", res["auc"], epoch)
-        for epoch in range(1 + last_epoch, param['num_epochs'] + 1):
-
-
-            loss = train(epoch)
-            if 'train' in log:
-                print(f'(T) | Epoch={epoch:03d}, loss={loss:.4f}')
-            writer.add_scalar("train loss", loss, epoch)
-
-            if epoch % args.validate_interval == 0:
-                res = test(epoch, tsne_dir=args.tsne_dir)
-
-                if "acc" in res:
-                    if 'eval' in log:
-                        print(f'(E) | Epoch={epoch:04d}, avg_acc = {res["acc"]}, '
-                              f'avg_micro_f1 = {res["micro_f1"]}, avg_macro_f1 = {res["macro_f1"]}')
-                        if '' in log and epoch % 500 == 0:  # 每 500 轮写入一次最终结果
-                            fres.write(f'{comment},{epoch:04d},acc,{res["acc"]}\n')
-                            fres.write(f'{comment},{epoch:04d},micro_f1,{res["micro_f1"]}\n')
-                            fres.write(f'{comment},{epoch:04d},macro_f1,{res["macro_f1"]}\n')
-                    writer.add_scalar("acc", res["acc"], epoch)
-                    writer.add_scalar("micro-f1", res["micro_f1"], epoch)
-                    writer.add_scalar("macro-f1", res["macro_f1"], epoch)
-
-                if "nmi" in res and "ari" in res:
-                    if 'eval' in log:
-                        print(f'(E) | Epoch={epoch:04d}, avg_nmi = {res["nmi"]}, avg_ari = {res["ari"]}')
-                        if epoch % 500 == 0:  # 每 500 轮写入一次最终结果
-                            fres.write(f'{comment},{epoch:04d},nmi,{res["nmi"]}\n')
-                            fres.write(f'{comment},{epoch:04d},ari,{res["ari"]}\n')
-                    writer.add_scalar("nmi", res["nmi"], epoch)
-                    writer.add_scalar("ari", res["ari"], epoch)
-
-                if "auc" in res:
-                    if 'eval' in log:
-                        print(f'(E) | Epoch={epoch:04d}, avg_auc = {res["auc"]}')
-                        if epoch % 500 == 0:  # 每 500 轮写入一次最终结果
-                            fres.write(f'{comment},{epoch:04d},auc,{res["auc"]}\n')
-                    writer.add_scalar("auc", res["auc"], epoch)
-
-                # saving the best model
-                if args.model_path is not None:
-                    if "acc" in res:
-                        current_metric = "acc"
-                    elif "nmi" in res:
-                        current_metric = "nmi"
-                    elif "auc" in res:
-                        current_metric = "auc"
-                    else:
-                        raise KeyError('No metrics to compare for best model saving.')
-                    current_res = round(res[current_metric], 4)
-
-                    if current_res > best_res:
-                        if best_epoch > 0:
-                            remove_model(best_epoch, comment, args.model_path)
-                        best_epoch = epoch
-                        best_res = current_res
-                        pth = save_model(model, optimizer, epoch, comment, args.model_path)
-                        print(f'(E) | Epoch = {epoch}: newly best model '
-                              f'({current_metric}={current_res}) saved in \'{pth}\'. ')
-
-    if use_nni:
-        res = test(epoch, final=True)
-
+    for epoch in range(1 + last_epoch, param['num_epochs'] + 1):
+        loss = train(epoch)
+        if 'train' in log:
+            print(f'(T) | Epoch={epoch:03d}, loss={loss:.4f}')
+        if epoch % args.validate_interval == 0:
+            res = test(epoch)
         if 'final' in log:
             print(f'{res}')
 
-    fres.close()
+
