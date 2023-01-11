@@ -73,26 +73,10 @@ def log_regression(z,
                     'y_true': y[split['test']].view(-1, 1),
                     'y_pred': classifier(z[split['test']]).argmax(-1).view(-1, 1)
                 })['acc']
-                test_micro_f1 = evaluator.eval_micro_f1({
-                    'y_true': y[split['test']].view(-1, 1),
-                    'y_pred': classifier(z[split['test']]).argmax(-1).view(-1, 1)
-                })['micro-f1']
-                test_macro_f1 = evaluator.eval_macro_f1({
-                    'y_true': y[split['test']].view(-1, 1),
-                    'y_pred': classifier(z[split['test']]).argmax(-1).view(-1, 1)
-                })['macro-f1']
                 val_acc = evaluator.eval({
                     'y_true': y[split['val']].view(-1, 1),
                     'y_pred': classifier(z[split['val']]).argmax(-1).view(-1, 1)
                 })['acc']
-                val_micro_f1 = evaluator.eval_micro_f1({
-                    'y_true': y[split['val']].view(-1, 1),
-                    'y_pred': classifier(z[split['val']]).argmax(-1).view(-1, 1)
-                })['micro-f1']
-                val_macro_f1 = evaluator.eval_macro_f1({
-                    'y_true': y[split['val']].view(-1, 1),
-                    'y_pred': classifier(z[split['val']]).argmax(-1).view(-1, 1)
-                })['macro-f1']
                 if val_acc > best_val_acc:
                     best_val_acc = val_acc
                     best_test_acc = test_acc
