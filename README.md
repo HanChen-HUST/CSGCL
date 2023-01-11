@@ -6,3 +6,5 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 * torch_geometric 2.0.1
 * cdlib 0.2.6
 * sklearn 0.24.1
+* networkx 2.5.1
+* numpy 1.22.4
