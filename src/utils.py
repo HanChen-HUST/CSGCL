@@ -1,7 +1,6 @@
 import os
 import warnings
 from collections import OrderedDict
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -9,7 +8,6 @@ from torch.utils.data import random_split
 from torch_geometric.nn import GCNConv, SGConv, SAGEConv, GATConv, GraphConv, GINConv
 from torch_geometric.utils import degree, to_networkx
 from torch_scatter import scatter
-
 import networkx as nx
 
 
@@ -72,31 +70,3 @@ def generate_split(num_samples: int, train_ratio: float, val_ratio: float, gener
     val_mask[idx_val] = True
 
     return train_mask, test_mask, val_mask
-
-
-def save_model(model, optimizer, epoch, prefix, model_path):
-    state_dict = OrderedDict({k: v for k, v in model.state_dict().items()})
-    obj = {
-        'epoch': epoch,
-        'state_dict': state_dict,
-        'optimizer': optimizer.state_dict()
-    }
-    model_name = os.path.join(model_path, f'{prefix}_ep{epoch}.pth')
-    torch.save(obj, model_name)
-    return model_name
-
-
-def load_model(model, optimizer, model_name, device):
-    cp = torch.load(model_name, map_location=device)
-    model.load_state_dict(
-        OrderedDict({k: v for k, v in cp['state_dict'].items()}), strict=False)
-    optimizer.load_state_dict(cp['optimizer'])
-    return model, optimizer, cp['epoch']
-
-
-def remove_model(epoch, prefix, model_path):
-    model_name = f'{prefix}_ep{epoch}.pth'
-    try:
-        os.remove(os.path.join(model_path, model_name))
-    except FileNotFoundError:
-        warnings.warn('No model file is removed.')
