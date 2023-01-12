@@ -14,5 +14,3 @@ def get_dataset(path, name):
         return Amazon(root=path, name='computers', transform=T.NormalizeFeatures())
     if name == 'Amazon-Photo':
         return Amazon(root=path, name='photo', transform=T.NormalizeFeatures())
-
-    return (CitationFull if name == 'dblp' else Planetoid)(osp.join(root_path, 'Citation'), name, transform=T.NormalizeFeatures())
