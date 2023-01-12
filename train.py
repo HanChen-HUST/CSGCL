@@ -80,12 +80,10 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default='cuda:0')
     parser.add_argument('--dataset', type=str, default='WikiCS')
     parser.add_argument('--param', type=str, default='local:wikics.json')
-    parser.add_argument('--seed', type=int, default=39788)  # for torch
+    parser.add_argument('--seed', type=int, default=39788)  
     parser.add_argument('--batch_size', type=int, default=1024)
     parser.add_argument('--verbose', type=str, default='train,eval,final')
     parser.add_argument('--cls_seed', type=int, default=12345)
-    parser.add_argument('--save_split', type=str, nargs='?')
-    parser.add_argument('--load_split', type=str, nargs='?')
     parser.add_argument('--validate_interval', type=int, default=100)
     parser.add_argument('--community_detection_method', type=str, default='leiden')
     parser.add_argument('--drop_edge_thresh', type=float, default=1.)
@@ -110,7 +108,6 @@ if __name__ == '__main__':
         'readout': 'mean',
         'start_ep': 500,
         'beta': 1.,
-        'sigma': 0.25,
     }
     param_keys = default_param.keys()
     for key in param_keys:
