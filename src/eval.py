@@ -107,7 +107,7 @@ class MulticlassEvaluator:
         total = y_true.size(0)
         correct = (y_true == y_pred).to(torch.float32).sum()
         return (correct / total).item()
- =
+ 
     def eval(self, res):
         return {'acc': self._eval(**res)}
 
