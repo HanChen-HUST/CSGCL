@@ -1,12 +1,12 @@
 {
-    "learning_rate": 0.01,
-    "num_hidden": 128,
+    "learning_rate": 0.005,
+    "num_hidden": 512,
     "num_proj_hidden": 128,
     "activation": "prelu",
-    "drop_edge_rate_1": 0.5,
-    "drop_edge_rate_2": 0.5,
-    "drop_feature_rate_1": 0.2,
+    "drop_edge_rate_1": 0.6,
+    "drop_edge_rate_2": 0.7,
+    "drop_feature_rate_1": 0.1,
     "drop_feature_rate_2": 0.1,
-    "tau": 0.1,
-    "num_epochs": 1500
+    "tau": 0.2,
+    "num_epochs": 2500
 }
