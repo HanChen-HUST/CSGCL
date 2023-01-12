@@ -3,7 +3,6 @@ import torch
 from torch.optim import Adam
 import torch.nn as nn
 from src.model import LogReg
-from sklearn.metrics import 
 
 
 def get_idx_split(dataset, split, preload_split):
