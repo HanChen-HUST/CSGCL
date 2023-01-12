@@ -182,6 +182,5 @@ if __name__ == '__main__':
             print(f'(T) | Epoch={epoch:03d}, loss={loss:.4f}')
         if epoch % args.validate_interval == 0:
             res = test(epoch)
-            if "acc" in res:
-                if 'eval' in log:
-                    print(f'(E) | Epoch={epoch:04d}, avg_acc = {res["acc"]}')
+            if 'eval' in log:
+                print(f'(E) | Epoch={epoch:04d}, avg_acc = {res["acc"]}')
