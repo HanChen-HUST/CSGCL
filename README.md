@@ -5,8 +5,9 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 * PyTorch 1.8.1
 * torch_geometric 2.0.1
 * cdlib 0.2.6
-* sklearn 0.24.1
 * networkx 2.5.1
 * numpy 1.22.4
 # Examples
+python train.py --dataset WikiCS --param local:wikics.json --device cuda:0 --num_epochs 5000 --loss_scheme mod --beta 10 --start_ep 1000
+
 python train.py --dataset WikiCS --param local:wikics.json --device cuda:0 --num_epochs 5000 --drop_feature_thresh 0.7  --drop_edge_rate_1 0.2 --drop_edge_rate_2 0.7 --drop_feature_rate_1 0.1 --drop_feature_rate_2 0.2  --loss_scheme mod --beta 10 --start_ep 1000
