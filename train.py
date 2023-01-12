@@ -13,10 +13,6 @@ from src.functional import (getmod,
 from src.model import Encoder, GRACE
 from src.functional import (drop_edge_weighted,
                             drop_edge_by_modularity,
-                            
-                            feature_drop_weights,
-                            drop_feature_weighted_2,
-                            feature_drop_weights_dense,
                             )
 from src.eval import log_regression, MulticlassEvaluator
 from src.utils import (get_base_model,
