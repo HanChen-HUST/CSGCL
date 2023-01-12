@@ -19,7 +19,6 @@ class Encoder(nn.Module):
                 self.conv.append(base_model(2 * out_channels, 2 * out_channels))
             self.conv.append(base_model(2 * out_channels, out_channels))
             self.conv = nn.ModuleList(self.conv)
-
             self.activation = activation
         else:
             self.fc_skip = nn.Linear(in_channels, out_channels)
@@ -49,10 +48,8 @@ class GRACE(torch.nn.Module):
         super(GRACE, self).__init__()
         self.encoder: Encoder = encoder
         self.tau: float = tau
-
         self.fc1 = torch.nn.Linear(num_hidden, num_proj_hidden)
         self.fc2 = torch.nn.Linear(num_proj_hidden, num_hidden)
-
         self.num_hidden = num_hidden
 
     def forward(self, x: torch.Tensor, edge_index: torch.Tensor) -> torch.Tensor:
@@ -63,13 +60,11 @@ class GRACE(torch.nn.Module):
         return self.fc2(z)
 
     def sim(self, z1: torch.Tensor, z2: torch.Tensor):
-        """计算余弦相似度。"""
         z1 = F.normalize(z1)
         z2 = F.normalize(z2)
         return torch.mm(z1, z2.t())
 
     def semi_loss(self, z1: torch.Tensor, z2: torch.Tensor):
-        """计算对比损失。"""
         f = lambda x: torch.exp(x / self.tau)
         refl_sim = f(self.sim(z1, z1))
         between_sim = f(self.sim(z1, z2))
@@ -82,7 +77,6 @@ class GRACE(torch.nn.Module):
         f = lambda x: torch.exp(x / self.tau)
         indices = torch.arange(0, num_nodes).to(device)
         losses = []
-
         for i in range(num_batches):
             mask = indices[i * batch_size:(i + 1) * batch_size]
             refl_sim = f(self.sim(z1[mask], z1))  
@@ -90,43 +84,9 @@ class GRACE(torch.nn.Module):
             losses.append(-torch.log(between_sim[:, i * batch_size:(i + 1) * batch_size].diag()
                                      / (refl_sim.sum(1) + between_sim.sum(1)
                                         - refl_sim[:, i * batch_size:(i + 1) * batch_size].diag())))
-
         return torch.cat(losses)
-
-    def community_loss(self, z, c1, c2, com):
-
-        f = lambda x: torch.exp(x / self.tau)
-
-        intra_negative = f(self.sim(z, c1)).sum(1)
-        inter_negative = f(self.sim(z, c2)).sum(1)
-        positive = f(self.sim(z, c2[com])).diag() # 节点1-社区2对比
-        intra_meaningless = f(self.sim(z, c1[com])).diag() # 节点1-社区1对比
-
-        return -torch.log(positive / (intra_negative + inter_negative - intra_meaningless - positive))
-
-    def batched_community_loss(self, z, c1, c2, com, batch_size):
-        device = z.device
-        num_nodes = z.size(0)
-        num_batches = (num_nodes - 1) // batch_size + 1
-        f = lambda x: torch.exp(x / self.tau)
-        indices = torch.arange(0, num_nodes).to(device)
-        losses = []
-
-        for i in range(num_batches):
-            mask = indices[i * batch_size:(i + 1) * batch_size]
-            positive = f(self.sim(z[mask], c2[com]))
-            intra_meaningless = f(self.sim(z[mask], c1[com]))
-            intra_negative = f(self.sim(z[mask], c1)).sum(1)
-            inter_negative = f(self.sim(z[mask], c2)).sum(1)
-
-            losses.append(-torch.log(positive[:, i * batch_size:(i + 1) * batch_size].diag()
-                                     / (intra_negative + inter_negative
-                                        - positive[:, i * batch_size:(i + 1) * batch_size].diag()
-                                        - intra_meaningless[:, i * batch_size:(i + 1) * batch_size].diag())))
-        return torch.cat(losses)
-
+        
     def semi_modularity_loss(self, z1, z2, mod, ep, start_ep, beta_max):
-        """计算对比损失。"""
         beta = min(max(0, (ep - start_ep) / 100), beta_max)
         f = lambda x: torch.exp(x / self.tau)
         refl_sim = f(self.sim(z1, z1) + beta * mod + beta * mod.unsqueeze(dim=1))
@@ -144,8 +104,8 @@ class GRACE(torch.nn.Module):
 
         for i in range(num_batches):
             mask = indices[i * batch_size:(i + 1) * batch_size]
-            refl_sim = f(self.sim(z1[mask], z1) + beta * mod + beta * mod.unsqueeze(dim=1)[mask])  # [B, N]
-            between_sim = f(self.sim(z1[mask], z2) + beta * mod + beta * mod.unsqueeze(dim=1)[mask])  # [B, N]
+            refl_sim = f(self.sim(z1[mask], z1) + beta * mod + beta * mod.unsqueeze(dim=1)[mask])  #
+            between_sim = f(self.sim(z1[mask], z2) + beta * mod + beta * mod.unsqueeze(dim=1)[mask])  
 
             losses.append(-torch.log(between_sim[:, i * batch_size:(i + 1) * batch_size].diag()
                                      / (refl_sim.sum(1) + between_sim.sum(1)
