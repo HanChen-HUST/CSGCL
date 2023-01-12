@@ -10,26 +10,19 @@ from src.functional import (getmod,
                             drop_feature_by_modularity,
                             drop_feature_by_modularity_dense,
                             )
-from simple_param.sp import SimpleParam
 from src.model import Encoder, GRACE
 from src.functional import (drop_edge_weighted,
-                            degree_drop_weights,
                             drop_edge_by_modularity,
-                            evc_drop_weights,
-                            pr_drop_weights,
+                            
                             feature_drop_weights,
                             drop_feature_weighted_2,
                             feature_drop_weights_dense,
                             )
-from src.eval import log_regression, MulticlassEvaluator, evaluate_clu
+from src.eval import log_regression, MulticlassEvaluator
 from src.utils import (get_base_model,
                        get_activation,
                        generate_split,
-                       compute_pr,
-                       eigenvector_centrality,
-                       save_model,
-                       load_model,
-                       remove_model)
+                       )
 from src.dataset import get_dataset
 from src.augment import get_cd_algorithm
 def train(epoch):
@@ -80,8 +73,6 @@ def test(final=False):
         for i in range(20):
             cls_acc = log_regression(z, dataset, evaluator, split=f'wikics:{i}', num_epochs=800)
             accs.append(cls_acc['acc'])
-            micro_f1s.append(cls_acc['micro_f1'])
-            macro_f1s.append(cls_acc['macro_f1'])
         acc = sum(accs) / len(accs)
     else:
         cls_acc = log_regression(z, dataset, evaluator, split='rand:0.1', num_epochs=3000, preload_split=split)
@@ -96,6 +87,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=39788)  # for torch
     parser.add_argument('--batch_size', type=int, default=1024)
     parser.add_argument('--verbose', type=str, default='train,eval,final')
+    parser.add_argument('--cls_seed', type=int, default=12345)
     parser.add_argument('--save_split', type=str, nargs='?')
     parser.add_argument('--load_split', type=str, nargs='?')
     parser.add_argument('--validate_interval', type=int, default=100)
@@ -121,7 +113,6 @@ if __name__ == '__main__':
         'drop_scheme': 'degree',
         'readout': 'mean',
         'start_ep': 500,
-        'alpha': 0.5,
         'beta': 1.,
         'sigma': 0.25,
     }
@@ -129,19 +120,18 @@ if __name__ == '__main__':
     for key in param_keys:
         parser.add_argument(f'--{key}', type=type(default_param[key]), nargs='?')
     args = parser.parse_args()
-    sp = SimpleParam(default=default_param)
-    param = sp(source=args.param, preprocess='nni')
+    param = default_param
     for key in param_keys:
         if getattr(args, key) is not None:
             param[key] = getattr(args, key)
     comment = args.dataset + \
               (f'_node_{param["drop_feature_rate_1"]}_{param["drop_feature_rate_2"]}'
-               if args.com_drop_feature else '') + \
-              (f'_edge_{param["drop_edge_rate_1"]}_{param["drop_edge_rate_2"]}'
-               if args.com_drop_edge else '') + \
-              (f'_t0_{param["start_ep"]}_beta_{param["beta"]}'
+               + 
+              f'_edge_{param["drop_edge_rate_1"]}_{param["drop_edge_rate_2"]}'
+                + 
+              f'_t0_{param["start_ep"]}_beta_{param["beta"]}'
                if args.loss_scheme in ["mod"] else '')
-    if args.device != 'cpu':
+    if args.device!= 'cpu':
         args.device = 'cuda'
     train_scheme = ('Communal Attribute Voting' ) + ' & ' + \
                    ('Communal Edge Dropping')
@@ -150,10 +140,8 @@ if __name__ == '__main__':
     else:
         loss_scheme_str = 'InfoNCE'
     print(f"training settings: \n"
-          f"{train_scheme}\n"
-          f"downstream task: {args.tasks}\n"
           f"data: {args.dataset}\n"
-          f"community detection method: {args.cluster_method}\n"
+          f"community detection method: {args.community_detection_method}\n"
           f"device: {args.device}\n"
           f"batch size if used: {args.batch_size}\n"
           f"drop edge rate: {param['drop_edge_rate_1']}/{param['drop_edge_rate_2']}\n"
@@ -194,8 +182,6 @@ if __name__ == '__main__':
         lr=param['learning_rate'],
         weight_decay=param['weight_decay'])
     last_epoch = 0
-    if args.cp is not None:
-        model, optimizer, last_epoch = load_model(model, optimizer, args.cp, device)
     log = args.verbose.split(',')
     for epoch in range(1 + last_epoch, param['num_epochs'] + 1):
         loss = train(epoch)
@@ -203,5 +189,6 @@ if __name__ == '__main__':
             print(f'(T) | Epoch={epoch:03d}, loss={loss:.4f}')
         if epoch % args.validate_interval == 0:
             res = test(epoch)
-        if 'final' in log:
-            print(f'{res}')
+            if "acc" in res:
+                if 'eval' in log:
+                    print(f'(E) | Epoch={epoch:04d}, avg_acc = {res["acc"]}')
