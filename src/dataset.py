@@ -16,20 +16,3 @@ def get_dataset(path, name):
         return Amazon(root=path, name='photo', transform=T.NormalizeFeatures())
 
     return (CitationFull if name == 'dblp' else Planetoid)(osp.join(root_path, 'Citation'), name, transform=T.NormalizeFeatures())
-
-
-def get_path(base_path, name):
-    if name in ['Cora', 'CiteSeer', 'PubMed']:
-        return base_path
-    else:
-        return osp.join(base_path, name)
-
-
-if __name__ == "__main__":
-    from torch_geometric.datasets import TUDataset
-    path = './datasets'
-    path = osp.join(path, 'WikiCS')
-    dataset = TUDataset(root=path, name='tu', transform=T.NormalizeFeatures())
-    data = dataset[0]
-    data = data.to('cuda:2')
-    print(data)
