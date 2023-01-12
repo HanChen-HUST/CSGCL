@@ -3,21 +3,6 @@ import networkx as nx
 import torch
 from cdlib.utils import convert_graph_formats
 
-def drop_feature(x, drop_prob):
-    drop_mask = torch.empty((x.size(1),), dtype=torch.float32, device=x.device).uniform_(0, 1) < drop_prob
-    x = x.clone()
-    x[:, drop_mask] = 0
-    return x
-
-def drop_feature_weighted_2(x, w, p: float, threshold: float = 0.7):
-    w = w / w.mean() * p
-    w = w.where(w < threshold, torch.ones_like(w) * threshold)
-    drop_prob = w
-    drop_mask = torch.bernoulli(drop_prob).to(torch.bool)
-    x = x.clone()
-    x[:, drop_mask] = 0.
-    return x
-
 def drop_edge_weighted(edge_index, edge_weights, p: float, threshold: float = 1.):
     edge_weights = edge_weights / edge_weights.mean() * p
     edge_weights = edge_weights.where(edge_weights < threshold, torch.ones_like(edge_weights) * threshold)
@@ -58,22 +43,6 @@ def drop_feature_by_modularity(feature, n_mod, p, max_threshold: float = 0.7):
     feature[:, drop_mask] = 0. 
     return feature
 
-def feature_drop_weights(x, node_c):
-    x = x.to(torch.bool).to(torch.float32)
-    w = x.t() @ node_c
-    w = w.log()
-    s = (w.max() - w) / (w.max() - w.mean())
-
-    return s
-
-def feature_drop_weights_dense(x, node_c):
-    x = x.abs()
-    w = x.t() @ node_c
-    w = w.log()
-    s = (w.max() - w) / (w.max() - w.mean())
-
-    return s
-
 def transition(communities, num_nodes):
     classes = np.full(num_nodes, -1)
     for i, node_list in enumerate(communities):
@@ -86,10 +55,6 @@ def get_edge_weight(edge_index: torch.Tensor, com: np.ndarray, c_mod: np.ndarray
     edge_weight = np.asarray([edge_mod([com[u.item()], com[v.item()]]) for u, v in edge_index.T])
     edge_weight = normalize(edge_weight)
     return torch.from_numpy(edge_weight).to(edge_index.device)
-
-
-
-
 
 def getmod(graph, communities):
     graph = convert_graph_formats(graph, nx.Graph)
@@ -115,15 +80,12 @@ def getmod(graph, communities):
                         inc[com] = inc.get(com, 0.0) + float(weight) 
         except:
             pass
-
     c_mod = []
     for idx, com in enumerate(set(coms.values())):
         c_mod.append((inc.get(com, 0.0) / links) - (deg.get(com, 0.0) / (2.0 * links)) ** 2)
     c_mod = np.asarray(c_mod)
-
     n_mod = np.zeros(graph.number_of_nodes(), dtype=np.float32)
     for i, w in enumerate(c_mod):
         for j in communities[i]:
             n_mod[j] = c_mod[i]
-
     return c_mod, n_mod 
