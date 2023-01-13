@@ -11,9 +11,6 @@ from src.functional import (getmod,
                             drop_feature_by_modularity_dense,
                             )
 from src.model import Encoder, GRACE
-from src.functional import (drop_edge_weighted,
-                            drop_edge_by_modularity,
-                            )
 from src.eval import log_regression, MulticlassEvaluator
 from src.utils import (get_base_model,
                        get_activation,
