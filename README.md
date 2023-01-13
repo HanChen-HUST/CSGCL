@@ -10,15 +10,6 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 # Datasets
 
 
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
 
 <div align="center">
  
