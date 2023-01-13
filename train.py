@@ -97,7 +97,6 @@ if __name__ == '__main__':
         'tau': 0.4,
         'num_epochs': 3000,
         'weight_decay': 1e-5,
-        'drop_scheme': 'degree',
         'readout': 'mean',
         'start_ep': 500,
         'gamma': 1.,
@@ -132,7 +131,6 @@ if __name__ == '__main__':
           f"drop edge rate: {param['drop_edge_rate_1']}/{param['drop_edge_rate_2']}\n"
           f"drop node feature rate: {param['drop_feature_rate_1']}/{param['drop_feature_rate_2']}\n"
           f"readout: {param['readout']}\n"
-          f"adaptive weight: {param['drop_scheme']}\n"
           f"loss: {loss_scheme_str}\n"
           f"gamma: {param['gamma']}\n"
           f"t0: {param['start_ep']}\n"
