@@ -140,6 +140,7 @@ if __name__ == '__main__':
           f"adaptive weight: {param['drop_scheme']}\n"
           f"loss: {loss_scheme_str}\n"
           f"gamma: {param['gamma']}\n"
+          f"t0: {param['start_ep']}\n"
           f"epochs: {param['num_epochs']}\n"
           )
     torch_seed = args.seed
