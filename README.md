@@ -24,7 +24,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
-<table border="1" cellspacing="0">
+<table>
       <thead>
         <tr>
           <th>序号</th>
@@ -51,7 +51,7 @@ Run the code in Examples,the datasets our paper used will auto download to new f
           <td>25</td>
         </tr>
       </tbody>
-</table>
+    </table>
 
 
 
