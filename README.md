@@ -13,6 +13,16 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 * Amazon-Photo
 * Coauthor-CS
 
+| 标题1 | 标题2 | 标题3 |
+
+| ------ | ------ | ------ |
+
+| 文本 | 文本 | 文本 |
+
+| 文本 | 文本 | 文本 |
+
+
+
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
 # Examples
