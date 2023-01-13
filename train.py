@@ -59,7 +59,6 @@ def test():
     evaluator = MulticlassEvaluator()
     if args.dataset == 'WikiCS':
         accs = []
-        micro_f1s, macro_f1s = [], []
         for i in range(20):
             cls_acc = log_regression(z, dataset, evaluator, split=f'wikics:{i}', num_epochs=800)
             accs.append(cls_acc['acc'])
