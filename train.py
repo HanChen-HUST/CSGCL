@@ -48,7 +48,7 @@ def train(epoch):
     loss.backward()
     optimizer.step()
     return loss.item()
-def test(final=False):
+def test():
     model.eval()
     with torch.no_grad():
         z = model(data.x, data.edge_index)
