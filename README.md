@@ -1,14 +1,3 @@
-<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-
 # CSGCL: Community Strength Enhanced Graph Contrastive Learning
 PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strength Enhanced Graph Contrastive Learning,The implementation is based on WWW 2021 Paper Graph Contrastive Learning with Adaptive Augmentation implementation(https://github.com/CRIPAC-DIG/GCA), much apperciate to them!
 # Requirements
@@ -20,6 +9,16 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 * numpy 1.22.4
 # Datasets
 
+
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
 
 <div class="center">
  
