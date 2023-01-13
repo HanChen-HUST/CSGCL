@@ -79,14 +79,13 @@ if __name__ == '__main__':
     parser.add_argument('--param', type=str, default='local:wikics.json')
     parser.add_argument('--seed', type=int, default=39788)  
     parser.add_argument('--batch_size', type=int, default=1024)
-    parser.add_argument('--verbose', type=str, default='train,eval,final')
+    parser.add_argument('--verbose', type=str, default='train,eval')
     parser.add_argument('--cls_seed', type=int, default=12345)
     parser.add_argument('--validate_interval', type=int, default=100)
     parser.add_argument('--community_detection_method', type=str, default='leiden')
     parser.add_argument('--drop_edge_thresh', type=float, default=1.)
     parser.add_argument('--drop_feature_thresh', type=float, default=1.)
-    parser.add_argument('--loss_scheme', type=str, default=None,
-                        choices=["mod"])
+    
     default_param = {
         'learning_rate': 0.01,
         'num_hidden': 256,
