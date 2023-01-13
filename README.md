@@ -14,7 +14,10 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 * Coauthor-CS
 
 Run the turtorial code below,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
+
 # Examples
+The best hyperparameter we used has been into json format to each dataset respectively.
 python train.py --dataset WikiCS --param local:wikics.json --device cuda:0 --num_epochs 5000 --loss_scheme mod --beta 10 --start_ep 1000
 
-python train.py --dataset WikiCS --param local:wikics.json --device cuda:0 --num_epochs 5000 --drop_feature_thresh 0.7  --drop_edge_rate_1 0.2 --drop_edge_rate_2 0.7 --drop_feature_rate_1 0.1 --drop_feature_rate_2 0.2  --loss_scheme mod --beta 10 --start_ep 1000
+if you want to change the hyperparameter,for example,you want to change the first view's edge drop rate to 0.4,you can
+python train.py --dataset WikiCS --param local:wikics.json --device cuda:0 --num_epochs 5000 --drop_feature_thresh 0.7  --drop_edge_rate_1 0.4 --loss_scheme mod --beta 10 --start_ep 1000
