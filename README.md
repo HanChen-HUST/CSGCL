@@ -24,12 +24,35 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
-<table border="1">
-<tr>
-<td>Row 1</td>, <td>cell 1</td>
-<td>Row 1</td>, <td>cell 2</td>
-</tr>
-</table>
+<table border="1" cellspacing="0">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>姓名</th>
+          <th>年龄</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Tom</td>
+          <td>23</td>
+        </tr>
+
+        <tr>
+          <td>2</td>
+          <td>Jack</td>
+          <td>24</td>
+        </tr>
+
+        <tr>
+          <td>3</td>
+          <td>Steve</td>
+          <td>25</td>
+        </tr>
+      </tbody>
+    </table>
+
 
 
 # Examples
