@@ -12,6 +12,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 * Amazon-Computers
 * Amazon-Photo
 * Coauthor-CS
+
 Run the turtorial code below,the datasets will auto download to new folder ./datasets/,e.g. ./datasets/WikiCS.
 # Examples
 python train.py --dataset WikiCS --param local:wikics.json --device cuda:0 --num_epochs 5000 --loss_scheme mod --beta 10 --start_ep 1000
