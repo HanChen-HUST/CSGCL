@@ -29,7 +29,7 @@ Run the code in Examples,the datasets our paper used will auto download to new f
 
 
 
- ![Image text](https://github.com/HanChenHUSTAIA/CSGCL/blob/main/CSGCL%20Model/csgcl.pdf)
+ ![Image text](https://github.com/HanChenHUSTAIA/CSGCL/blob/main/CSGCL%20Model/CSGCL.jpg)
 
 # Examples
 The four datasets' best hyperparameter we getted from the parameter sensitively experiment has been written into json format file respectively,for example,if you want to
