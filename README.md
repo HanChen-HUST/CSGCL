@@ -1,9 +1,3 @@
-<style>
-table {
-margin: auto;
-}
-</style>
-
 # CSGCL: Community Strength Enhanced Graph Contrastive Learning
 PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strength Enhanced Graph Contrastive Learning,The implementation is based on WWW 2021 Paper Graph Contrastive Learning with Adaptive Augmentation implementation(https://github.com/CRIPAC-DIG/GCA), much apperciate to them!
 # Requirements
@@ -17,7 +11,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 
 
 | Dataset | Type | Nodes |Edges| Attributes| Classes |
- |:-: | :-: | :-:| :-:| :-:| :-:|
+-------: | :------: | :-------
 | WikiCS| reference |11,701 |216,123 |300 |10 |
 |Amazon-Photo |co-purchase | 7,487 | 119,043 | 745|  8
 | Amazon-Computers | co-purchase | 13,381 | 245,778|  767 | 10
