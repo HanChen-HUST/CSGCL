@@ -24,16 +24,50 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
-<table border="1">
-    <tr>
-        <td>row 1, cell 1</td>
-        <td>row 1, cell 2</td>
-    </tr>
-    <tr>
-        <td>row 2, cell 1</td>
-        <td>row 2, cell 2</td>
-    </tr>
-</table>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			td{
+				text-align: center;
+				font-size: 24px;
+			}
+		</style>
+	</head>
+	<body>
+		<table border="1" cellspacing="0" cellpadding="60px">
+			<tr>
+				<td>名次</td>
+				<td colspan="3">分数</td>
+				<td>总分</td>
+				<td>奖金</td>
+			</tr>
+			<tr>
+				<td>第一名</td>
+				<td>80</td>
+				<td>90</td>
+				<td>100</td>
+				<td>270</td>
+				<td>200</td>
+			</tr>
+			<tr>
+				<td>第二名</td>
+				<td>95</td>
+				<td>85</td>
+				<td>95</td>
+				<td>275</td>
+				<td>230</td>
+			</tr>
+			<tr>
+				<td colspan="5">奖金总计</td>
+				<td>430</td>
+			</tr>
+		</table>
+	</body>
+</html>
+
 
 
 # Examples
