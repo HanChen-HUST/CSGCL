@@ -74,6 +74,11 @@ if you want to change the hyperparameter,for example,if you want to change the f
 | gCooL-best  | co-author | 18,333|  81,894|  6,805 
 | CSGCL | co-author | 18,333|  81,894|  6,805 
 
+
+
+</table>
+</div>
+
 Raw (LogReg) & $\mathbf{X}$ & - & 71.85±0.00 & 73.25±0.00 & 79.02±0.00 & 89.64±0.00\\ 
 DeepWalk (w/o $\mathbf{X}$) & $\mathbf{A}$ & node & 73.84±0.16 & 85.77±0.58 & 89.06±0.43 & 84.71±0.35 \\ 
 Node2Vec & $\mathbf{A}$ & node & 75.52±0.17 & 86.19±0.26 & 88.86±0.43 & 86.27±0.22\\ 
@@ -96,6 +101,3 @@ CSGCL (ours) & $\mathbf{X},\mathbf{A}$ & community & \textbf{78.60±0.13} & \tex
 \hline\hline
 GCN & $\mathbf{X},\mathbf{A},\mathbf{Y}$ & - & 78.02±0.51 & 87.79±0.36 & 91.82±0.01 & 93.06±0.00\\
 GAT & $\mathbf{X},\mathbf{A},\mathbf{Y}$ & - & 77.62±0.69 & 88.64±0.63 & 92.16±0.47 & 91.49±0.30\\\hline
-
-</table>
-</div>
