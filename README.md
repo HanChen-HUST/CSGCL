@@ -12,6 +12,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 
 
 <div align="center">
+<table border="1" cellspacing="0">
  
 | Dataset | Type | Nodes |Edges| Attributes| Classes |
 |  :-:   | :-:   | :-:   | :-:   |  :-:   | :-:  |
@@ -20,7 +21,8 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 | Amazon-Computers | co-purchase | 13,381 | 245,778|  767 | 10
 | Coauthor-CS | co-author | 18,333|  81,894|  6,805 | 15
 
- </div>
+</table>
+</div>
 
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
