@@ -86,15 +86,15 @@ class GRACE(torch.nn.Module):
                                         - refl_sim[:, i * batch_size:(i + 1) * batch_size].diag())))
         return torch.cat(losses)
         
-    def semi_modularity_loss(self, z1, z2, mod, ep, start_ep, beta_max):
-        beta = min(max(0, (ep - start_ep) / 100), beta_max)
+    def semi_modularity_loss(self, z1, z2, mod, ep, start_ep,gamma_max):
+        gamma = min(max(0, (ep - start_ep) / 100), gamma_max)
         f = lambda x: torch.exp(x / self.tau)
-        refl_sim = f(self.sim(z1, z1) + beta * mod + beta * mod.unsqueeze(dim=1))
-        between_sim = f(self.sim(z1, z2) + beta * mod + beta * mod.unsqueeze(dim=1))
+        refl_sim = f(self.sim(z1, z1) + gamma * mod + gamma * mod.unsqueeze(dim=1))
+        between_sim = f(self.sim(z1, z2) + gamma * mod +gamma * mod.unsqueeze(dim=1))
         return -torch.log(between_sim.diag() / (refl_sim.sum(1) + between_sim.sum(1) - refl_sim.diag()))
 
-    def batched_semi_modularity_loss(self, z1, z2, mod, ep, start_ep, beta_max, batch_size):
-        beta = min(max(0, (ep - start_ep) / 100), beta_max)
+    def batched_semi_modularity_loss(self, z1, z2, mod, ep, start_ep, gamma_max, batch_size):
+        gamma = min(max(0, (ep - start_ep) / 100), gamma_max)
         device = z1.device
         num_nodes = z1.size(0)
         num_batches = (num_nodes - 1) // batch_size + 1
@@ -104,8 +104,8 @@ class GRACE(torch.nn.Module):
 
         for i in range(num_batches):
             mask = indices[i * batch_size:(i + 1) * batch_size]
-            refl_sim = f(self.sim(z1[mask], z1) + beta * mod + beta * mod.unsqueeze(dim=1)[mask])  #
-            between_sim = f(self.sim(z1[mask], z2) + beta * mod + beta * mod.unsqueeze(dim=1)[mask])  
+            refl_sim = f(self.sim(z1[mask], z1) + gamma * mod + gamma * mod.unsqueeze(dim=1)[mask])  #
+            between_sim = f(self.sim(z1[mask], z2) + gamma * mod + gamma * mod.unsqueeze(dim=1)[mask])  
 
             losses.append(-torch.log(between_sim[:, i * batch_size:(i + 1) * batch_size].diag()
                                      / (refl_sim.sum(1) + between_sim.sum(1)
