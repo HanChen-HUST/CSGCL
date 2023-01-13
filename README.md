@@ -10,7 +10,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 # Datasets
 
 
- <center>居中的展示效果</center>
+<p align="center">居中的展示效果</p>
  
 | Dataset | Type | Nodes |Edges| Attributes| Classes |
 |  ----  | ----  | ----  | ----  |  ----  | ----  |
