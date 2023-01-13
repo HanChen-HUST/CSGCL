@@ -36,8 +36,8 @@ def train(epoch):
         x_2 = drop_feature_by_modularity(data.x, n_mod, param['drop_feature_rate_2'], args.drop_feature_thresh)
     z1 = model(x_1, edge_index_1)
     z2 = model(x_2, edge_index_2)
-    if args.loss_scheme == "mod":
-        loss = model.modularity_loss(z1, z2,
+
+    loss = model.modularity_loss(z1, z2,
                                      n_mod=n_mod,
                                      ep=epoch,
                                      start_ep=param['start_ep'],
@@ -45,9 +45,6 @@ def train(epoch):
                                      batch_size=args.batch_size
                                      if args.dataset in ['Coauthor-CS']
                                      else None)
-    else:
-        loss = model.loss(z1, z2, batch_size=args.batch_size
-        if args.dataset in ['Coauthor-CS'] else None)
     loss.backward()
     optimizer.step()
     return loss.item()
@@ -124,10 +121,9 @@ if __name__ == '__main__':
         args.device = 'cuda'
     train_scheme = ('Communal Attribute Voting' ) + ' & ' + \
                    ('Communal Edge Dropping')
-    if args.loss_scheme == "mod":
-        loss_scheme_str = 'Team-Up InfoNCE'
-    else:
-        loss_scheme_str = 'InfoNCE'
+
+    loss_scheme_str = 'Team-Up InfoNCE'
+    
     print(f"training settings: \n"
           f"data: {args.dataset}\n"
           f"community detection method: {args.community_detection_method}\n"
