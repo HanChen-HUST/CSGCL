@@ -7,6 +7,17 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 * cdlib 0.2.6
 * networkx 2.5.1
 * numpy 1.22.4
+
+
+
+
+
+# Overview of the proposed CSGCL framework
+ ![Image text](https://github.com/HanChenHUSTAIA/CSGCL/blob/main/CSGCL%20Model/CSGCL.jpg)
+
+
+
+
 # Datasets
 
 
@@ -28,8 +39,6 @@ Run the code in Examples,the datasets our paper used will auto download to new f
 
 
 
-# Overview of the proposed CSGCL framework
- ![Image text](https://github.com/HanChenHUSTAIA/CSGCL/blob/main/CSGCL%20Model/CSGCL.jpg)
 
 # Examples
 The four datasets' best hyperparameter we getted from the parameter sensitively experiment has been written into json format file respectively,for example,if you want to
