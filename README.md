@@ -19,5 +19,10 @@ Run the turtorial code below,the datasets our paper used will auto download to n
 The best hyperparameter we used has been into json format to each dataset respectively.
 > python train.py --dataset WikiCS --param local:wikics.json 
 
+<pre class="md-fences md-end-block md-fences-with-lineno ty-contain-cm modeLoaded" spellcheck="false" lang="c" cid="n54" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px 0px; margin-bottom: 15px; margin-top: 0px; width: inherit;"> #include</pre>
+
+这是一段代码块
+ <pre class="md-fences md-end-block md-fences-with-lineno ty-contain-cm modeLoaded" spellcheck="false" lang="java" cid="n55" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px 0px; margin-bottom: 0px; margin-top: 15px; width: inherit;"> #这是一段Java</pre> 
+ 
 if you want to change the hyperparameter,for example,if you want to change the first view's edge drop rate to 0.4,you can
 > python train.py --dataset WikiCS --param local:wikics.json --drop_edge_rate_1 0.4
