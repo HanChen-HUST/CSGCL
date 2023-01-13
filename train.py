@@ -16,6 +16,7 @@ from src.utils import (get_base_model,
                        get_activation,
                        generate_split,
                        )
+from simple_param.sp import SimpleParam                       
 from src.dataset import get_dataset
 from src.augment import get_cd_algorithm
 def train(epoch):
@@ -48,7 +49,7 @@ def train(epoch):
     loss.backward()
     optimizer.step()
     return loss.item()
-def test():
+def test(final=False):
     model.eval()
     with torch.no_grad():
         z = model(data.x, data.edge_index)
@@ -59,6 +60,7 @@ def test():
     evaluator = MulticlassEvaluator()
     if args.dataset == 'WikiCS':
         accs = []
+        micro_f1s, macro_f1s = [], []
         for i in range(20):
             cls_acc = log_regression(z, dataset, evaluator, split=f'wikics:{i}', num_epochs=800)
             accs.append(cls_acc['acc'])
@@ -103,7 +105,11 @@ if __name__ == '__main__':
     for key in param_keys:
         parser.add_argument(f'--{key}', type=type(default_param[key]), nargs='?')
     args = parser.parse_args()
-    param = default_param
+
+    # parse param
+    sp = SimpleParam(default=default_param)
+    param = sp(source=args.param, preprocess='nni')
+    # merge cli arguments and parsed param
     for key in param_keys:
         if getattr(args, key) is not None:
             param[key] = getattr(args, key)
