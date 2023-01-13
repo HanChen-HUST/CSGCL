@@ -10,5 +10,5 @@
     "tau": 0.6,
     "num_epochs": 2000,
     "start_ep":1000,
-    "beta":10
+    "gamma":10
 }
