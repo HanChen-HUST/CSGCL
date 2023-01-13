@@ -3,12 +3,6 @@ import networkx as nx
 import torch
 from cdlib.utils import convert_graph_formats
 
-def drop_edge_weighted(edge_index, edge_weights, p: float, threshold: float = 1.):
-    edge_weights = edge_weights / edge_weights.mean() * p
-    edge_weights = edge_weights.where(edge_weights < threshold, torch.ones_like(edge_weights) * threshold)
-    sel_mask = torch.bernoulli(1. - edge_weights).to(torch.bool)
-    return edge_index[:, sel_mask]
-
 def drop_edge_by_modularity(edge_index, edge_weight, p, threshold=1.):
     edge_weight = edge_weight / edge_weight.mean() * (1. - p)
     edge_weight = edge_weight.where(edge_weight > (1. - threshold), torch.ones_like(edge_weight) * (1. - threshold))
