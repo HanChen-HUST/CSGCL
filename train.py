@@ -119,7 +119,7 @@ if __name__ == '__main__':
               f'_edge_{param["drop_edge_rate_1"]}_{param["drop_edge_rate_2"]}'
                 + 
               f'_t0_{param["start_ep"]}_gamma_{param["gamma"]}'
-               if args.loss_scheme in ["mod"] else '')
+               )
     if args.device!= 'cpu':
         args.device = 'cuda'
     train_scheme = ('Communal Attribute Voting' ) + ' & ' + \
