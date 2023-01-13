@@ -15,7 +15,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 
 
 | Dataset | Type | Nodes |Edges| Attributes| Classes |
-| ------ | ------ | ------ |
+| ------ | ------ | ------ |------ |------ |------ |
 | Wiki-CS| reference |11,701 |216,123 |300 |10 |
 |Photo |co-purchase | 7,487 | 119,043 | 745|  8
 | Computers | co-purchase | 13,381 | 245,778|  767 | 10
