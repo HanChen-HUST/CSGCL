@@ -16,7 +16,7 @@ from src.utils import (get_base_model,
                        get_activation,
                        generate_split,
                        )
-from simple_param.sp import SimpleParam                       
+from src.simple_param.sp import SimpleParam                       
 from src.dataset import get_dataset
 from src.augment import get_cd_algorithm
 def train(epoch):
