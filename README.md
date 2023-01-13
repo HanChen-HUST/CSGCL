@@ -73,7 +73,7 @@ if you want to change the hyperparameter,for example,if you want to change the f
 | AFGRL | co-author | 77.62±0.49 | 89.88±0.33 | 93.22±0.28 | 93.27±0.17
 | gCooL-best  |78.20±0.09 | 88.67±0.10 | 92.84±0.20 | 92.75±0.01
 | CSGCL | 78.60±0.13|90.17±0.17|93.32±0.21|93.55±0.12
-\hline\hline
+
 
 
 </table>
