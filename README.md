@@ -57,7 +57,7 @@ if you want to change the hyperparameter,for example,if you want to change the f
 <table border="1" cellspacing="0">
  
 | Dataset |WikiCS| Amazon-Computers |Amazon-Photo|Coauthor-CS|
-|  :-:   | :-:   | :-:   | :-:   |  :-:   | :-:  |
+|  :-:   | :-:   | :-:   | :-:   |  :-:   | 
 | Raw (LogReg)| 71.85±0.00 |73.25±0.00 |79.02±0.00 |89.64±0.00
 |DeepWalk (w/o X) |73.84±0.16 | 85.77±0.58 | 89.06±0.43 | 84.71±0.35 
 | DeepWalk (w/ X)  |  77.21±0.03 |86.28±0.07 | 90.05±0.08 | 87.70±0.04
