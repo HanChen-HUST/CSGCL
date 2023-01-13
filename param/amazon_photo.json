@@ -8,5 +8,7 @@
     "drop_feature_rate_1": 0.1,
     "drop_feature_rate_2": 0.1,
     "tau": 0.3,
-    "num_epochs": 3000
+    "num_epochs": 3000,
+    "start_ep":2000,
+    "beta":1
 }
