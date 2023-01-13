@@ -1,5 +1,5 @@
-# CSGCL
-PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enhanced Graph Contrastive Learning,The implementation is based on WWW 2021 Paper Graph Contrastive Learning with Adaptive Augmentation implementation(https://github.com/CRIPAC-DIG/GCA), much apperciate to them!
+# CSGCL: Community Strength Enhanced Graph Contrastive Learning
+PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strength Enhanced Graph Contrastive Learning,The implementation is based on WWW 2021 Paper Graph Contrastive Learning with Adaptive Augmentation implementation(https://github.com/CRIPAC-DIG/GCA), much apperciate to them!
 # Requirements
 * Python 3.8.8
 * PyTorch 1.8.1
@@ -8,11 +8,12 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 * networkx 2.5.1
 * numpy 1.22.4
 # Datasets
-* WikiCS
-* Amazon-Computers
-* Amazon-Photo
-* Coauthor-CS
 
+<style>
+table
+{
+    margin: auto;
+}
 
 | Dataset | Type | Nodes |Edges| Attributes| Classes |
 | ------ | ------ | ------ |------ |------ |------ |
@@ -20,7 +21,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper Community Strength Enha
 |Amazon-Photo |co-purchase | 7,487 | 119,043 | 745|  8
 | Amazon-Computers | co-purchase | 13,381 | 245,778|  767 | 10
 | Coauthor-CS | co-author | 18,333|  81,894|  6,805 | 15
-
+</style>
 
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
