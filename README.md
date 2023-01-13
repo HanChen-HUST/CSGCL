@@ -26,8 +26,8 @@ Run the code in Examples,the datasets our paper used will auto download to new f
 
 <table border="1">
 <tr>
-<td>Row 1, cell 1</td>
-<td>Row 1, cell 2</td>
+<td>Row 1</td>, <td>cell 1</td>
+<td>Row 1</td>, <td>cell 2</td>
 </tr>
 </table>
 
