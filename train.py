@@ -44,7 +44,7 @@ def train(epoch):
                                      n_mod=n_mod,
                                      ep=epoch,
                                      start_ep=param['start_ep'],
-                                     beta_max=param['beta'],
+                                     gamma_max=param['gamma'],
                                      batch_size=args.batch_size
                                      if args.dataset in ['Coauthor-CS']
                                      else None)
@@ -107,7 +107,7 @@ if __name__ == '__main__':
         'drop_scheme': 'degree',
         'readout': 'mean',
         'start_ep': 500,
-        'beta': 1.,
+        'gamma': 1.,
     }
     param_keys = default_param.keys()
     for key in param_keys:
@@ -122,7 +122,7 @@ if __name__ == '__main__':
                + 
               f'_edge_{param["drop_edge_rate_1"]}_{param["drop_edge_rate_2"]}'
                 + 
-              f'_t0_{param["start_ep"]}_beta_{param["beta"]}'
+              f'_t0_{param["start_ep"]}_gamma_{param["gamma"]}'
                if args.loss_scheme in ["mod"] else '')
     if args.device!= 'cpu':
         args.device = 'cuda'
@@ -142,7 +142,7 @@ if __name__ == '__main__':
           f"readout: {param['readout']}\n"
           f"adaptive weight: {param['drop_scheme']}\n"
           f"loss: {loss_scheme_str}\n"
-          f"beta: {param['beta']}\n"
+          f"gamma: {param['gamma']}\n"
           f"epochs: {param['num_epochs']}\n"
           )
     torch_seed = args.seed
