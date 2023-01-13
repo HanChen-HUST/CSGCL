@@ -28,7 +28,7 @@ Run the code in Examples,the datasets our paper used will auto download to new f
 
 
 
-
+# Overview of the proposed CSGCL framework
  ![Image text](https://github.com/HanChenHUSTAIA/CSGCL/blob/main/CSGCL%20Model/CSGCL.jpg)
 
 # Examples
