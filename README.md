@@ -27,6 +27,10 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
 
 
+
+
+ ![Image text](https://github.com/HanChenHUSTAIA/CSGCL/blob/main/CSGCL%20Model/csgcl.pdf)
+
 # Examples
 The four datasets' best hyperparameter we getted from the parameter sensitively experiment has been written into json format file respectively,for example,if you want to
 train and evalute WikiCS datasets by our best hyperparater,you can run code like below.
