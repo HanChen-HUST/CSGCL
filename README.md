@@ -20,7 +20,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 }
 </style>
 
-<div class="center">
+<div align="center">
  
 | Dataset | Type | Nodes |Edges| Attributes| Classes |
 |  ----  | ----  | ----  | ----  |  ----  | ----  |
