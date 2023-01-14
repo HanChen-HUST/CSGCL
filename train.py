@@ -83,6 +83,7 @@ if __name__ == '__main__':
     parser.add_argument('--community_detection_method', type=str, default='leiden')
     parser.add_argument('--drop_edge_thresh', type=float, default=1.)
     parser.add_argument('--drop_feature_thresh', type=float, default=1.)
+    parser.add_argument('--dataset_path', type=str, default="./datasets")
     
     default_param = {
         'learning_rate': 0.01,
@@ -122,10 +123,8 @@ if __name__ == '__main__':
                )
     if args.device!= 'cpu':
         args.device = 'cuda'
-    train_scheme = ('Communal Attribute Voting' ) + ' & ' + \
-                   ('Communal Edge Dropping')
 
-    loss_scheme_str = 'Team-Up InfoNCE'
+
     
     print(f"training settings: \n"
           f"data: {args.dataset}\n"
@@ -134,7 +133,6 @@ if __name__ == '__main__':
           f"batch size if used: {args.batch_size}\n"
           f"drop edge rate: {param['drop_edge_rate_1']}/{param['drop_edge_rate_2']}\n"
           f"drop node feature rate: {param['drop_feature_rate_1']}/{param['drop_feature_rate_2']}\n"
-          f"loss: {loss_scheme_str}\n"
           f"gamma: {param['gamma']}\n"
           f"t0: {param['start_ep']}\n"
           f"epochs: {param['num_epochs']}\n"
@@ -145,8 +143,7 @@ if __name__ == '__main__':
     if args.cls_seed is not None:
         np.random.seed(args.cls_seed)
     device = torch.device(args.device)
-    path = './datasets'
-    path = osp.join(path, args.dataset)
+    path = osp.join(args.dataset_path, args.dataset)
     dataset = get_dataset(path, args.dataset)
     data = dataset[0]
     data = data.to(device)
