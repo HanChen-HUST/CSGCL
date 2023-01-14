@@ -18,8 +18,7 @@ PyTorch implementation for IJCAI 2023 Under Review Paper CSGCL:Community Strengt
 # Datasets tips
 
 
-Run the code in Examples,the datasets our paper used will auto download to new folder "datasets",for example "./datasets/WikiCS".
-
+Run the code in Examples,the datasets our paper used will auto download to default folder "datasets",for example "./datasets/WikiCS".if you want to change the dataset save path,you can add "--dataset_path YOUR_DATASET_PATH" in the **Examples** code.
 
 
 
