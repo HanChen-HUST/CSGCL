@@ -4,10 +4,10 @@ import random
 import numpy as np
 import torch
 from torch_geometric.utils import to_networkx
-from src.functional import getmod,transition,get_edge_weight,drop_feature_by_modularity,drop_feature_by_modularity_dense,
+from src.functional import getmod,get_edge_weight,drop_feature_by_modularity,drop_feature_by_modularity_dense,transition
 from src.model import Encoder, GRACE
 from src.eval import log_regression, MulticlassEvaluator
-from src.utils import get_base_model,get_activation,generate_split,
+from src.utils import get_base_model,get_activation,generate_split
 from src.sp import SimpleParam                       
 from src.dataset import get_dataset
 from src.augment import get_cd_algorithm
