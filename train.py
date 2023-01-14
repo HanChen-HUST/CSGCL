@@ -4,21 +4,14 @@ import random
 import numpy as np
 import torch
 from torch_geometric.utils import to_networkx
-from src.functional import (getmod,
-                            transition,
-                            get_edge_weight,
-                            drop_feature_by_modularity,
-                            drop_feature_by_modularity_dense,
-                            )
+from src.functional import getmod,transition,get_edge_weight,drop_feature_by_modularity,drop_feature_by_modularity_dense,
 from src.model import Encoder, GRACE
 from src.eval import log_regression, MulticlassEvaluator
-from src.utils import (get_base_model,
-                       get_activation,
-                       generate_split,
-                       )
+from src.utils import get_base_model,get_activation,generate_split,
 from src.sp import SimpleParam                       
 from src.dataset import get_dataset
 from src.augment import get_cd_algorithm
+
 def train(epoch):
     model.train()
     optimizer.zero_grad()
@@ -37,7 +30,6 @@ def train(epoch):
         x_2 = drop_feature_by_modularity(data.x, n_mod, param['drop_feature_rate_2'], args.drop_feature_thresh)
     z1 = model(x_1, edge_index_1)
     z2 = model(x_2, edge_index_2)
-
     loss = model.modularity_loss(z1, z2,
                                      n_mod=n_mod,
                                      ep=epoch,
@@ -49,7 +41,8 @@ def train(epoch):
     loss.backward()
     optimizer.step()
     return loss.item()
-def test(final=False):
+
+  def test(final=False):
     model.eval()
     with torch.no_grad():
         z = model(data.x, data.edge_index)
@@ -70,7 +63,8 @@ def test(final=False):
         acc = cls_acc['acc']
     res["acc"] = acc
     return res
-if __name__ == '__main__':
+
+  if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=str, default='cuda:0')
     parser.add_argument('--dataset', type=str, default='WikiCS')
@@ -106,11 +100,8 @@ if __name__ == '__main__':
     for key in param_keys:
         parser.add_argument(f'--{key}', type=type(default_param[key]), nargs='?')
     args = parser.parse_args()
-
-    # parse param
     sp = SimpleParam(default=default_param)
     param = sp(source=args.param, preprocess='nni')
-    # merge cli arguments and parsed param
     for key in param_keys:
         if getattr(args, key) is not None:
             param[key] = getattr(args, key)
@@ -123,9 +114,7 @@ if __name__ == '__main__':
                )
     if args.device!= 'cpu':
         args.device = 'cuda'
-
-
-    
+        
     print(f"training settings: \n"
           f"data: {args.dataset}\n"
           f"community detection method: {args.community_detection_method}\n"
@@ -137,6 +126,7 @@ if __name__ == '__main__':
           f"t0: {param['start_ep']}\n"
           f"epochs: {param['num_epochs']}\n"
           )
+    
     torch_seed = args.seed
     torch.manual_seed(torch_seed)
     random.seed(12345)
@@ -155,9 +145,7 @@ if __name__ == '__main__':
     c_mod, n_mod = getmod(g, communities)
     edge_weight = get_edge_weight(data.edge_index, com, c_mod)
     com_size = [len(c) for c in communities]
-    print(f'Done! \n{len(com_size)} communities detected. \n'
-          f'The largest community has {com_size[0]} nodes. \n'
-         )
+    print(f'Done! \n{len(com_size)} communities detected. \n'f'The largest community has {com_size[0]} nodes. \n')
     encoder = Encoder(dataset.num_features, param['num_hidden'], get_activation(param['activation']),
                       base_model=get_base_model(param['base_model']), k=param['num_layers']).to(device)
     model = GRACE(encoder, param['num_hidden'], param['num_proj_hidden'], param['tau']).to(device)
