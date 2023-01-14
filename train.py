@@ -42,7 +42,7 @@ def train(epoch):
     optimizer.step()
     return loss.item()
 
-  def test(final=False):
+def test(final=False):
     model.eval()
     with torch.no_grad():
         z = model(data.x, data.edge_index)
@@ -64,7 +64,7 @@ def train(epoch):
     res["acc"] = acc
     return res
 
-  if __name__ == '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=str, default='cuda:0')
     parser.add_argument('--dataset', type=str, default='WikiCS')
