@@ -130,18 +130,18 @@ class GRACE(torch.nn.Module):
         return ret
 
     def modularity_loss(self, z1: torch.Tensor, z2: torch.Tensor, n_mod: np.ndarray,
-                        ep: int, start_ep: int = 0, beta_max: float = 1.,
+                        ep: int, start_ep: int = 0, gamma_max: float = 1.,
                         mean: bool = True, batch_size: Optional[int] = None):
 
         h1 = self.projection(z1)
         h2 = self.projection(z2)
         n_mod = torch.from_numpy(n_mod).to(h1.device)
         if batch_size is None:
-            l1 = self.semi_modularity_loss(h1, h2, n_mod, ep, start_ep, beta_max)
-            l2 = self.semi_modularity_loss(h2, h1, n_mod, ep, start_ep, beta_max)
+            l1 = self.semi_modularity_loss(h1, h2, n_mod, ep, start_ep, gamma_max)
+            l2 = self.semi_modularity_loss(h2, h1, n_mod, ep, start_ep, gamma_max)
         else:
-            l1 = self.batched_semi_modularity_loss(h1, h2, n_mod, ep, start_ep, beta_max, batch_size)
-            l2 = self.batched_semi_modularity_loss(h2, h1, n_mod, ep, start_ep, beta_max, batch_size)
+            l1 = self.batched_semi_modularity_loss(h1, h2, n_mod, ep, start_ep, gamma_max, batch_size)
+            l2 = self.batched_semi_modularity_loss(h2, h1, n_mod, ep, start_ep, gamma_max, batch_size)
         ret = (l1 + l2) * 0.5
         ret = ret.mean() if mean else ret.sum()
         return ret
