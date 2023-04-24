@@ -71,7 +71,7 @@ def getmod(graph, communities):
                     if neighbor == node: 
                         inc[com] = inc.get(com, 0.0) + float(weight)
                     else:
-                        inc[com] = inc.get(com, 0.0) + float(weight) 
+                        inc[com] = inc.get(com, 0.0) + float(weight) / 2.0
         except:
             pass
     c_mod = []
