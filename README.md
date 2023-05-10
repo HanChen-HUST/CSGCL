@@ -19,10 +19,10 @@ The best hyperparameters for node classification (as reported in Appendix C.2 of
 python train.py --dataset WikiCS --param local:wikics.json
 ~~~
 
-You can change the parameter by either .json files (NOT RECOMMENDED) or simply add it to the command:
+You can change the parameter by either .json files (NOT RECOMMENDED) or simply add it to the command, for example:
 
 ```shell
-python train.py --dataset WikiCS --param local:wikics.json
+python train.py --dataset WikiCS --param local:wikics.json --num_epochs 5000
 ```
 
 # Results
