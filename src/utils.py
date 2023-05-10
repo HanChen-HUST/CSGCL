@@ -5,7 +5,7 @@ from torch.utils.data import random_split
 from torch_geometric.nn import GCNConv, SGConv, SAGEConv, GATConv, GraphConv, GINConv
 
 
-def get_base_model(name: str):
+def get_base_model(name):
     def gat_wrapper(in_channels, out_channels):
         return GATConv(
             in_channels=in_channels,
@@ -33,7 +33,7 @@ def get_base_model(name: str):
     return base_models[name]
 
 
-def get_activation(name: str):
+def get_activation(name):
     activations = {
         'relu': F.relu,
         'hardtanh': F.hardtanh,
@@ -46,7 +46,7 @@ def get_activation(name: str):
     return activations[name]
 
 
-def generate_split(num_samples: int, train_ratio: float, val_ratio: float, generator: torch.Generator = None):
+def generate_split(num_samples, train_ratio, val_ratio, generator=None):
     train_len = int(num_samples * train_ratio)
     val_len = int(num_samples * val_ratio)
     test_len = num_samples - train_len - val_len

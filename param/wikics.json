@@ -3,12 +3,12 @@
     "num_hidden": 256,
     "num_proj_hidden": 256,
     "activation": "prelu",
-    "drop_edge_rate_1": 0.2,
-    "drop_edge_rate_2": 0.7,
-    "drop_feature_rate_1": 0.1,
-    "drop_feature_rate_2": 0.2,
+    "ced_drop_rate_1": 0.2,
+    "ced_drop_rate_2": 0.7,
+    "cav_drop_rate_1": 0.1,
+    "cav_drop_rate_2": 0.2,
     "tau": 0.6,
     "num_epochs": 2000,
-    "start_ep":1000,
+    "t0":1000,
     "gamma":10
 }
