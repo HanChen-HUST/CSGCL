@@ -3,7 +3,7 @@ PyTorch implementation for IJCAI 2023 Main Track Paper "CSGCL: Community-Strengt
 
 The code is based on the implementation of [GCA](https://github.com/CRIPAC-DIG/GCA).
 
-We also have an introduction blog on [Zhihu](https://zhuanlan.zhihu.com/p/628116694).
+We also have a Chinese introduction blog on [Zhihu](https://zhuanlan.zhihu.com/p/628116694).
 
 
 # Dependencies
