@@ -29,7 +29,7 @@ python train.py --dataset WikiCS --param local:wikics.json --num_epochs 5000
 
 # Results
 
-All experiments are conducted on an 11GB NVIDIA GeForce GTX 1080 Ti GPU with CUDA . The node classification results are shown below.
+All experiments are conducted on an 11GB NVIDIA GeForce GTX 1080 Ti GPU with CUDA 11.3. The node classification results are shown below.
 
 |                     | Wiki-CS    | Computers  | Photo      | Coauthor-CS |
 | ------------------- | ---------- | ---------- | ---------- | ----------- |
