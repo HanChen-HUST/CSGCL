@@ -1,5 +1,5 @@
 # CSGCL: Community-Strength-Enhanced Graph Contrastive Learning
-PyTorch implementation for IJCAI 2023 Main Track Paper "CSGCL: Community-Strength-Enhanced Graph Contrastive Learning" ([arXiv:2305.04658](https://arxiv.org/abs/2305.04658)).
+PyTorch implementation for IJCAI 2023 Main Track Paper "CSGCL: Community-Strength-Enhanced Graph Contrastive Learning" (https://www.ijcai.org/proceedings/2023/0229.pdf).
 
 The code is based on the implementation of [GCA](https://github.com/CRIPAC-DIG/GCA).
 
